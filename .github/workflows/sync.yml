@@ -10,7 +10,6 @@ jobs:
     steps:
       - name: Clone
         run: |
-          echo "Run Clone Step!"
           git config --global init.defaultBranch main
           git init
           git remote add origin https://${GITHUB_USERNAME}:${GITHUB_PAT}@github.com/${GITHUB_REPOSITORY}.git
@@ -23,15 +22,16 @@ jobs:
           GITHUB_USERNAME: shenweiyan
           GITHUB_PAT: ${{ secrets.GH_PAT }}
           
-      - name: Push to GitHub BioITee BioWebStack
+      - name: Push to GitHub BioITee WebStackRES
         run: |
-          echo "Push to GitHub BioITee/BioWebStack!"
-          remote_repo="https://${GITHUB_USERNAME}:${GITHUB_PAT}@github.com/${GITHUB_REPOSITORY}.git"
-          git remote add github "${remote_repo}"
+          echo "Push to GitHub BioITee/WebStackRES!"
+          remote_repo="https://shenweiyan:${GITHUB_PAT}@github.com/${GITHUB_REPOSITORY}.git"
+          git remote add bioitee-webstackres "${remote_repo}"
           git show-ref 
           git branch --verbose
-          git push --all --force github
-          git push --tags --force github
+          # publish all
+          git push --all --force bioitee-webstackres
+          git push --tags --force bioitee-webstackres
         env:
           GITHUB_REPOSITORY: BioITee/WebStackRES
           GITHUB_USERNAME: shenweiyan
