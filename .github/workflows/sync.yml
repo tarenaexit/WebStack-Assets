@@ -10,29 +10,25 @@ jobs:
     steps:
       - name: Clone
         run: |
+          echo "Run Clone Step!"
           git config --global init.defaultBranch main
           git init
-          git remote add origin https://${GITHUB_USERNAME}:${GITHUB_PAT}@github.com/${GITHUB_REPOSITORY}.git
+          git remote add origin https://shenweiyan:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
           git fetch --all
           for branch in `git branch -a | grep remotes | grep -v HEAD`; do
             git branch --track ${branch##*/} $branch
           done
         env:
           GITHUB_REPOSITORY: shenweiyan/WebStackRES
-          GITHUB_USERNAME: shenweiyan
-          GITHUB_PAT: ${{ secrets.GH_PAT }}
-          
-      - name: Push to GitHub BioITee WebStackRES
-        run: |
-          echo "Push to GitHub BioITee/WebStackRES!"
-          remote_repo="https://shenweiyan:${GITHUB_PAT}@github.com/${GITHUB_REPOSITORY}.git"
-          git remote add bioitee-webstackres "${remote_repo}"
-          git show-ref 
-          git branch --verbose
-          # publish all
-          git push --all --force bioitee-webstackres
-          git push --tags --force bioitee-webstackres
-        env:
-          GITHUB_REPOSITORY: BioITee/WebStackRES
-          GITHUB_USERNAME: shenweiyan
-          GITHUB_PAT: ${{ secrets.GH_PAT }}
+          GITHUB_TOKEN: ${{ secrets.GH_PAT}}
+                   
+      - name: Push to GitHub 
+        uses: Yikun/hub-mirror-action@master
+        with:
+          src: github/shenweiyan
+          dst: github/BioITee
+          dst_key: ${{ secrets.GH_PAT }}
+          dst_token: ${{ secrets.GH_PAT }}
+          static_list: "WebStackRES"
+          force_update: true
+          timeout: '0.5h'
