@@ -19,7 +19,7 @@ jobs:
             git branch --track ${branch##*/} $branch
           done
         env:
-          GITHUB_REPOSITORY: shenweiyan/Bioit-top
+          GITHUB_REPOSITORY: shenweiyan/WebStackRES
           GITHUB_USERNAME: shenweiyan
           GITHUB_PAT: ${{ secrets.GH_PAT }}
           
@@ -33,6 +33,6 @@ jobs:
           git push --all --force github
           git push --tags --force github
         env:
-          GITHUB_REPOSITORY: BioITee/BioWebStack
+          GITHUB_REPOSITORY: BioITee/WebStackRES
           GITHUB_USERNAME: shenweiyan
           GITHUB_PAT: ${{ secrets.GH_PAT }}
