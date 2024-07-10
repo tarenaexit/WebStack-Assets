@@ -10,7 +10,6 @@ jobs:
     steps:
       - name: Clone
         run: |
-          echo "Run Clone Step!"
           git config --global init.defaultBranch main
           git init
           git remote add origin https://shenweiyan:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
@@ -19,18 +18,19 @@ jobs:
             git branch --track ${branch##*/} $branch
           done
         env:
-          GITHUB_REPOSITORY: shenweiyan/WebStackRES
+          GITHUB_REPOSITORY: shenweiyan/WebStack-Assets
           GITHUB_TOKEN: ${{ secrets.GH_PAT}}
                    
-      - name: Push to GitHub 
-        uses: Yikun/hub-mirror-action@master
-        with:
-          src: github/shenweiyan
-          dst: github/BioITee
-          dst_key: ${{ secrets.ID_RSA }}
-          dst_token: ${{ secrets.GH_PAT }}
-          src_account_type: user
-          dst_account_type: org
-          static_list: "WebStackRES"
-          force_update: true
-          timeout: '0.5h'
+      - name: Push to AtomGit
+        run: |
+          remote_repo="https://weiyan:${ATOMGIT_PAT}@atomgit.com/${ATOMGIT_REPOSITORY}.git"
+          git remote add atomgit "${remote_repo}"
+          # useful for debugging
+          git show-ref  
+          git branch --verbose
+          # publish all
+          git push --all --force atomgit
+          git push --tags --force atomgit
+        env:
+          ATOMGIT_REPOSITORY: weiyan/WebStack-Assets
+          ATOMGIT_PAT: ${{ secrets.ATOMGIT_PAT }}
